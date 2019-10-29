@@ -55,7 +55,7 @@ void loop() {
   //Use button2 as an emergency stop
   button2State = digitalRead(button2Pin);
 
-  if (button2State == HIGH && stage != endStage){
+  if (button2State == HIGH && stage != endStage) {
     stage = endStage;  //if the emergency stop is pressed, abort titration
   }
     
@@ -80,10 +80,10 @@ void loop() {
     pHnew = getpH();  //read pH after titrant added
     derivativeNew = abs(pHnew - pHold) / 0.5;  //find the rate of change 
     
-      if (derivativeNew - derivativeOld > 50){
+      if (derivativeNew - derivativeOld > 50) {
         stage = smallVolumeStage;  //if large change in pH, move to next stage
       }
-      else{
+      else {
         stage = largeVolumeStage;  //otherwise, add a large volume again
       }
       
@@ -96,10 +96,10 @@ void loop() {
     pHnew = getpH();  //read pH after titrant added
     derivativeNew = abs(pHnew - pHold) / 0.1;  //find the rate of change 
     
-      if (derivativeNew - derivativeOld > 200){
+      if (derivativeNew - derivativeOld > 200) {
         stage = dropVolumeStage;  //if large change in pH, move to next stage
       }
-      else{
+      else {
         stage = smallVolumeStage;  //otherwise, add a small volume again
       }
       
@@ -112,16 +112,16 @@ void loop() {
     pHnew = getpH();  //read pH after titrant added
     derivativeNew = abs(pHnew - pHold) / 0.05;  //find the rate of change 
     
-      if (derivativeNew - derivativeOld > 500){
+      if (derivativeNew - derivativeOld > 500) {
         stage = endStage;  //if large change in pH, the endpoint is reached
         for(int i =0; i < 3; i++) {
           digitalWrite(piezoPin, HIGH);  //make three beeps on piezo speaker
           delay(500);
-          digitalWrite(piezoPin, LOW);  //make three beeps on piezo speaker
+          digitalWrite(piezoPin, LOW);
           delay(200);
         }
       }
-      else{
+      else {
         stage = dropVolumeStage;  //otherwise, add a drop again
       }
       
@@ -129,17 +129,17 @@ void loop() {
     derivativeOld = derivativeNew;  //store the derivative
   }
 
-  else if (stage == endStage){
+  else if (stage == endStage) {
     digitalWrite(greenLED, LOW); //turn off green LED
     digitalWrite(redLED, HIGH); // turn on red LED
     button1State = digitalRead(button1Pin);
     button1State = digitalRead(button1Pin);
 
-    if (button2State == HIGH){
+    if (button2State == HIGH) {
       //play piezo song
       stage = beforeStage; //end the titration if the stop button is pressed
     }
-    else if (button1State == HIGH){
+    else if (button1State == HIGH) {
       stage = dropVolumeStage; //keep titrating if go button pressed
       digitalWrite(redLED, LOW); //turn off red LED
       digitalWrite(greenLED, HIGH); // turn on green LED
@@ -150,15 +150,15 @@ void loop() {
 }
 
 //function for getting a stable, average reading from the pH meter
-float getpH(){
+float getpH() {
   delay(200);
   int total = 0;
-  for (int i = 0; i < 20; i++){
+  for (int i = 0; i < 20; i++) {
     total += analogRead(pHpin); //total of 20 pH readings over 2 sec
     delay(100); 
   }
 
-  pHnew = total / 20;  //find the average pH value over 2 sec
+  pHnew = total / 20;  //find the average pH value
   return pHnew;
 }
 
