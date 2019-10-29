@@ -51,20 +51,25 @@ void setup() {
 }
 
 void loop() {
-  if (stage == beforeStage) {
+
+  //Use button2 as an emergency stop
+  button2State = digitalRead(button2Pin);
+
+  if (button2State == HIGH && stage != endStage){
+    stage = endStage;  //if the emergency stop is pressed, abort titration
+  }
+    
+  else if (stage == beforeStage) {
     button1State = digitalRead(button1Pin);   //check if button1 has been pressed
     
     if (button1State == HIGH) {
       stage = stabilizeStage;  //if button1 has been pressed, move forward with the titration
+      digitalWrite(redLED, LOW); //turn off the red LED
       digitalWrite(greenLED, HIGH);  //turn on the green LED to indicate titration start
     }
     else delay(150);
   }
 
-  else if (button2State == HIGH){
-    stage = endStage;  //if the emergency stop is pressed, abort titration
-  }
-   
   else if (stage == stabilizeStage && button2State == LOW) {
     pHold = getpH();  //get initial pH reading
     stage = largeVolumeStage;  //move forward with titration
@@ -91,7 +96,7 @@ void loop() {
     pHnew = getpH();  //read pH after titrant added
     derivativeNew = abs(pHnew - pHold) / 0.1;  //find the rate of change 
     
-      if (derivativeNew - derivativeOld > 500){
+      if (derivativeNew - derivativeOld > 200){
         stage = dropVolumeStage;  //if large change in pH, move to next stage
       }
       else{
@@ -107,9 +112,14 @@ void loop() {
     pHnew = getpH();  //read pH after titrant added
     derivativeNew = abs(pHnew - pHold) / 0.05;  //find the rate of change 
     
-      if (derivativeNew - derivativeOld > 5000){
+      if (derivativeNew - derivativeOld > 500){
         stage = endStage;  //if large change in pH, the endpoint is reached
-        //make three beeps on piezo speaker
+        for(int i =0; i < 3; i++) {
+          digitalWrite(piezoPin, HIGH);  //make three beeps on piezo speaker
+          delay(500);
+          digitalWrite(piezoPin, LOW);  //make three beeps on piezo speaker
+          delay(200);
+        }
       }
       else{
         stage = dropVolumeStage;  //otherwise, add a drop again
@@ -122,6 +132,8 @@ void loop() {
   else if (stage == endStage){
     digitalWrite(greenLED, LOW); //turn off green LED
     digitalWrite(redLED, HIGH); // turn on red LED
+    button1State = digitalRead(button1Pin);
+    button1State = digitalRead(button1Pin);
 
     if (button2State == HIGH){
       //play piezo song
