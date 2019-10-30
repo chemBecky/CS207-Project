@@ -29,7 +29,7 @@ const int endStage = 5;
 
 //declare global variables
 int stage = beforeStage;  //keeps the titration from starting before the button is pushed
-int servoPosition = 0;  //positon of servo between 0 and 180
+int servoPos = 0;  //positon of servo between 0 and 180
 float pHold;  //stores previous pH reading
 float pHnew;  
 float derivativeOld = 0.01; //stores previous derivative
@@ -163,16 +163,37 @@ float getpH() {
 }
 
 //function for adding largest amount of titrant
-void addLargeVolume(){
-  //for () move servo, reverse servo with long delay
+void addLargeVolume() {
+  for ( ; servoPos <= 90; servoPos ++){ 
+    servo.write(servoPos);  // move servo with long delay
+    delay(500);
+  }
+  for ( ; servoPos >= 0; servoPos --){ 
+    servo.write(servoPos);  // reverse servo
+    delay(15);
+  }
 }
 
 //function for adding small amount of titrant
-void addSmallVolume(){
-  //for ()move servo, reverse servo with short delay
+void addSmallVolume() {
+  for ( ; servoPos <= 90; servoPos ++){ 
+    servo.write(servoPos);  // move servo with small delay
+    delay(100);
+  }
+  for ( ; servoPos >= 0; servoPos --){ 
+    servo.write(servoPos);  // reverse servo
+    delay(15);
+  }
 }
 
 //function for adding titrant drop by drop
-void addDropVolume(){
-  //for ()move servo, reverse servo with smallest delay
+void addDropVolume() {
+  for ( ; servoPos <= 90; servoPos ++){ 
+    servo.write(servoPos);  // move servo with very short delay
+    delay(30);
+  }
+  for ( ; servoPos >= 0; servoPos --){ 
+    servo.write(servoPos);  // reverse servo
+    delay(15);
+  }
 }
