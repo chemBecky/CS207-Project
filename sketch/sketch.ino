@@ -136,6 +136,10 @@ void loop() {
     button2State = digitalRead(button2Pin);
 
     if (button2State == HIGH) {
+        for ( ; servoPos >= 0; servoPos --){ 
+          servo.write(servoPos);  // reverse servo to 0 degrees for next time
+          delay(150);
+        }
       //play piezo song
       stage = beforeStage; //end the titration if the stop button is pressed
     }
@@ -164,36 +168,36 @@ float getpH() {
 
 //function for adding largest amount of titrant
 void addLargeVolume() {
-  for ( ; servoPos <= 90; servoPos ++){ 
+  for ( ; servoPos <= 85; servoPos ++){ 
     servo.write(servoPos);  // move servo with long delay
     delay(500);
   }
-  for ( ; servoPos >= 0; servoPos --){ 
+  for ( ; servoPos >= 45; servoPos --){ 
     servo.write(servoPos);  // reverse servo
-    delay(15);
+    delay(150);
   }
 }
 
 //function for adding small amount of titrant
 void addSmallVolume() {
-  for ( ; servoPos <= 90; servoPos ++){ 
+  for ( ; servoPos <= 85; servoPos ++){ 
     servo.write(servoPos);  // move servo with small delay
     delay(100);
   }
-  for ( ; servoPos >= 0; servoPos --){ 
+  for ( ; servoPos >= 45; servoPos --){ 
     servo.write(servoPos);  // reverse servo
-    delay(15);
+    delay(150);
   }
 }
 
 //function for adding titrant drop by drop
 void addDropVolume() {
-  for ( ; servoPos <= 90; servoPos ++){ 
+  for ( ; servoPos <= 85; servoPos ++){ 
     servo.write(servoPos);  // move servo with very short delay
     delay(30);
   }
-  for ( ; servoPos >= 0; servoPos --){ 
+  for ( ; servoPos >= 45; servoPos --){ 
     servo.write(servoPos);  // reverse servo
-    delay(15);
+    delay(150);
   }
 }
