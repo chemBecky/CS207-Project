@@ -133,7 +133,7 @@ void loop() {
     digitalWrite(greenLED, LOW); //turn off green LED
     digitalWrite(redLED, HIGH); // turn on red LED
     button1State = digitalRead(button1Pin);
-    button1State = digitalRead(button1Pin);
+    button2State = digitalRead(button2Pin);
 
     if (button2State == HIGH) {
       //play piezo song
