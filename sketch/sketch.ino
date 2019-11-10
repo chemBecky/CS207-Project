@@ -67,7 +67,6 @@ void loop() {
       digitalWrite(redLED, LOW); //turn off the red LED
       digitalWrite(greenLED, HIGH);  //turn on the green LED to indicate titration start
     }
-    else delay(150);
   }
 
   else if (stage == stabilizeStage && button2State == LOW) {
@@ -83,10 +82,7 @@ void loop() {
       if (derivativeNew - derivativeOld > 50) {
         stage = smallVolumeStage;  //if large change in pH, move to next stage
       }
-      else {
-        stage = largeVolumeStage;  //otherwise, add a large volume again
-      }
-      
+
     pHold = pHnew;  //store the new pH
     derivativeOld = derivativeNew;  //store the derivative
   }
@@ -98,9 +94,6 @@ void loop() {
     
       if (derivativeNew - derivativeOld > 200) {
         stage = dropVolumeStage;  //if large change in pH, move to next stage
-      }
-      else {
-        stage = smallVolumeStage;  //otherwise, add a small volume again
       }
       
     pHold = pHnew;  //store the new pH
@@ -115,14 +108,11 @@ void loop() {
       if (derivativeNew - derivativeOld > 500) {
         stage = endStage;  //if large change in pH, the endpoint is reached
         for(int i =0; i < 3; i++) {
-          digitalWrite(piezoPin, HIGH);  //make three beeps on piezo speaker
+          analogWrite(piezoPin, 200);  //make three beeps on piezo speaker
           delay(500);
-          digitalWrite(piezoPin, LOW);
+          digitalWrite(piezoPin, 0);
           delay(200);
         }
-      }
-      else {
-        stage = dropVolumeStage;  //otherwise, add a drop again
       }
       
     pHold = pHnew;  //store the new pH
@@ -138,7 +128,7 @@ void loop() {
     if (button2State == HIGH) {
         for ( ; servoPos >= 0; servoPos --){ 
           servo.write(servoPos);  // reverse servo to 0 degrees for next time
-          delay(150);
+          delay(15);
         }
       //play piezo song
       stage = beforeStage; //end the titration if the stop button is pressed
@@ -170,11 +160,12 @@ float getpH() {
 void addLargeVolume() {
   for ( ; servoPos <= 85; servoPos ++){ 
     servo.write(servoPos);  // move servo with long delay
-    delay(500);
+    delay(15);
   }
+  delay(500);
   for ( ; servoPos >= 45; servoPos --){ 
     servo.write(servoPos);  // reverse servo
-    delay(150);
+    delay(15);
   }
 }
 
@@ -182,11 +173,12 @@ void addLargeVolume() {
 void addSmallVolume() {
   for ( ; servoPos <= 85; servoPos ++){ 
     servo.write(servoPos);  // move servo with small delay
-    delay(100);
+    delay(15);
   }
+  delay(100);
   for ( ; servoPos >= 45; servoPos --){ 
     servo.write(servoPos);  // reverse servo
-    delay(150);
+    delay(15);
   }
 }
 
@@ -194,10 +186,11 @@ void addSmallVolume() {
 void addDropVolume() {
   for ( ; servoPos <= 85; servoPos ++){ 
     servo.write(servoPos);  // move servo with very short delay
-    delay(30);
+    delay(15);
   }
+  delay(15);
   for ( ; servoPos >= 45; servoPos --){ 
     servo.write(servoPos);  // reverse servo
-    delay(150);
+    delay(15);
   }
 }
