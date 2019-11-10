@@ -29,7 +29,7 @@ const int endStage = 5;
 
 //declare global variables
 int stage = beforeStage;  //keeps the titration from starting before the button is pushed
-int servoPosition = 0;  //positon of servo between 0 and 180
+int servoPos = 0;  //positon of servo between 0 and 180
 float pHold;  //stores previous pH reading
 float pHnew;  
 float derivativeOld = 0.01; //stores previous derivative
@@ -115,7 +115,12 @@ void loop() {
     
       if (derivativeNew - derivativeOld > 500){
         stage = endStage;  //if large change in pH, the endpoint is reached
-        //make three beeps on piezo speaker
+        for(int i =0; i < 3; i++) {
+          analogWrite(piezoPin, 200);  //make three beeps on piezo speaker
+          delay(500);
+          analogWrite(piezoPin, 0);
+          delay(200);
+        }
       }
       else{
         stage = dropVolumeStage;  //otherwise, add a drop again
@@ -132,6 +137,10 @@ void loop() {
     button2State = digitalRead(button2Pin);
 
     if (button2State == HIGH){
+        for ( ; servoPos >= 0; servoPos --){ 
+          servo.write(servoPos);  // reverse servo to 0 degrees for next time
+          delay(15);
+        }      
       //play piezo song
       stage = beforeStage; //end the titration if the stop button is pressed
     }
@@ -169,16 +178,40 @@ float getpH(){
 }
 
 //function for adding largest amount of titrant
-void addLargeVolume(){
-  //for () move servo, reverse servo with long delay
+void addLargeVolume() {
+  for ( ; servoPos <= 85; servoPos ++){ 
+    servo.write(servoPos);  // move servo with long delay
+    delay(15);
+  }
+  delay(250);
+  for ( ; servoPos >= 45; servoPos --){ 
+    servo.write(servoPos);  // reverse servo
+    delay(15);
+  }
 }
 
 //function for adding small amount of titrant
-void addSmallVolume(){
-  //for ()move servo, reverse servo with short delay
+void addSmallVolume() {
+  for ( ; servoPos <= 85; servoPos ++){ 
+    servo.write(servoPos);  // move servo with small delay
+    delay(15);
+  }
+  delay(50);
+  for ( ; servoPos >= 45; servoPos --){ 
+    servo.write(servoPos);  // reverse servo
+    delay(15);
+  }
 }
 
 //function for adding titrant drop by drop
-void addDropVolume(){
-  //for ()move servo, reverse servo with smallest delay
+void addDropVolume() {
+  for ( ; servoPos <= 85; servoPos ++){ 
+    servo.write(servoPos);  // move servo with small delay
+    delay(15);
+  }
+  delay(5);
+  for ( ; servoPos >= 45; servoPos --){ 
+    servo.write(servoPos);  // reverse servo
+    delay(15);
+  }
 }
