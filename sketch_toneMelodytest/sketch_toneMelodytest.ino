@@ -18,9 +18,7 @@ int melody[] = {
 };
 
 // note durations as multiples of 1/16
-int noteLength[] = {
-  1, 3, 1, 2, 6, 2, 2, 2, 2, 3, 1, 2, 2, 1, 3, 2, 2, 1, 11, 1, 3, 8
-};
+int noteLength[] = { 1, 3, 1, 2, 6, 2, 2, 2, 2, 3, 1, 2, 2, 1, 3, 2, 2, 1, 11, 1, 3, 8 };
 
 const int piezoPin = 11;
 
@@ -28,9 +26,12 @@ void setup() {
   
   for (int note = 0; note < 22; note++) {  // play each note of the melody
 
-    int actualLength = 1000 / 16 * noteLength[note];  // calculate the actual note duration
+    int actualLength = 125 * noteLength[note];  // 1/16th note plays for 125 ms
     tone(piezoPin, melody[note], actualLength);
-    delay(30); //delay between notes
+    
+    int betweenNotes = actualLength * 1.3; // rest for an extra 30% of time between notes
+    delay(betweenNotes);
+    
     noTone(piezoPin);
   }
 }
