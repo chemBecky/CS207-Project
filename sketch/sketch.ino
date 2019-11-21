@@ -29,8 +29,8 @@ const int endStage = 5;
 
 //declare global variables
 int stage = beforeStage;   // keeps the titration from starting before the button is pushed
-int servoPos = 0;   // positon of servo where 0 is closed and 90 is fully open
-int openDelay = 500;   // time that the servo waits in the 'open' position
+int servoPos;   // positon of servo where 0 is a closed buret and 90 is fully open
+int openDelay;   // time that the servo waits in the 'open' position
 float pHold;   // stores previous pH reading
 float pHnew;  
 float derivativeOld = 0.01;  // stores previous derivative
@@ -62,14 +62,20 @@ void setup() {
 
 void loop() {
 
-    stopButtonState = digitalRead(stopButtonPin);  //Use stopButton as an emergency stop
+  stopButtonState = digitalRead(stopButtonPin);  // Use stopButton as an emergency stop
 
   if (stopButtonState == HIGH && stage != endStage) {   // if the emergency stop is pressed, abort titration
+    digitalWrite(greenLED, LOW); //turn off green LED
     stage = beforeStage;  
   }
     
   else if (stage == beforeStage) {
     goButtonState = digitalRead(goButtonPin);   // check if Go button has been pressed
+    
+    for ( ; servoPos >= 0; servoPos --) {  // reverse servo to 0 degrees to start
+      servo.write(servoPos);  
+      delay(25);
+    }
     
     if (goButtonState == HIGH) {
       stage = stabilizeStage;  // if GO button has been pressed, move forward with the titration
@@ -78,12 +84,12 @@ void loop() {
     }
   }
 
-  else if (stage == stabilizeStage && stopButtonState == LOW) {
+  else if (stage == stabilizeStage) {
     pHold = getpH();  // get initial pH reading
     stage = largeVolumeStage;  // move forward with titration
   }
 
-  else if (stage == largeVolumeStage && stopButtonState == LOW) {
+  else if (stage == largeVolumeStage) {
     openDelay = 4500;
     addTitrant(openDelay);  // rotate servo to add titrant
     pHnew = getpH();  // read pH after titrant added
@@ -97,7 +103,7 @@ void loop() {
     derivativeOld = derivativeNew;  // store the derivative
   }
 
-  else if (stage == smallVolumeStage && stopButtonState == LOW) {
+  else if (stage == smallVolumeStage) {
     openDelay = 1000;
     addTitrant(openDelay);  // rotate servo to add titrant
     pHnew = getpH();  // read pH after titrant added
@@ -111,8 +117,8 @@ void loop() {
     derivativeOld = derivativeNew;  // store the derivative
   }
 
-  else if (stage == dropVolumeStage && stopButtonState == LOW) {
-    openDelay = 0;
+  else if (stage == dropVolumeStage) {
+    openDelay = 1;
     addTitrant(openDelay);  // rotate servo to add titrant
     pHnew = getpH();  // read pH after titrant added
     derivativeNew = abs(pHnew - pHold) / 0.1;  // find the rate of change 
@@ -169,10 +175,10 @@ void loop() {
 
 //function for getting a stable, average reading from the pH meter
 float getpH() {
-  delay(200);
+  delay(1000);
   int total = 0;
   
-  for (int i = 0; i < 20; i++) {
+  for (int i = 0; i < 20; i ++) {
     total += analogRead(pHpin); //total of 20 pH readings over 2 sec
     delay(100); 
   }
