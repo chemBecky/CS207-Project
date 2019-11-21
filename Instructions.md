@@ -1,4 +1,4 @@
-#Instructions for use of Auto Titrator
+#  Instructions for use of Auto Titrator
 
 1.  Only needs to be done once: Upload sketch.ino code onto Arduino board.
 2.  Attach a clean buret to a retort stand.  Insert the stopcock attached to the servo into buret and secure with o-ring and nut.  Rotate the stopcock to open and rinse buret with titrant.  Check for and remove bubbles that form.  Rotate the stopcock to the closed position.  Fill the buret with at least 20 mL of titrant.
