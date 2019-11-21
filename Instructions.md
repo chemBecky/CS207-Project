@@ -12,6 +12,6 @@
 10.  Unclamp the servo.  Remove the solution and rotate the stopcock to empty the titrant into an appropriate container.  Remove the nut and o-ring so that the stopcock can be carefully removed from the buret and cleaned.
 
 ##  Auto Titrator States:
-**No lights** - before the titration, push the GO button to start
-**Green light** - during titration, push the STOP button to stop and begin again
-**Red light** - endpoint reached, push the GO button to continue, push the STOP button to end the titration
+-  **No lights** - before the titration, push the GO button to start
+-  **Green light** - during titration, push the STOP button to stop and begin again
+-  **Red light** - endpoint reached, push the GO button to continue, push the STOP button to end the titration
