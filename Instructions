@@ -1,0 +1,17 @@
+# Instructions for use of Auto Titrator
+
+Only needs to be done once: Upload sketch.ino code onto Arduino board.
+Attach a clean buret to a retort stand.  Insert the stopcock attached to the servo into buret and secure with o-ring and nut.  Rotate the stopcock to open and rinse buret with titrant.  Check for and remove bubbles that form.  Rotate the stopcock to the closed position.  Fill the buret with at least 20 mL of titrant.
+Set up the stir plate, buret height, and solution to be analyzed.  Insert the pH meter into the solution.  Start stirring the solution.
+Plug in the 5V adapter to power up the Arduino.  Record the initial buret reading.  The servo should move back to the starting position.
+Align the servo parallel to the buret. Tightly clamp the Arduino to a portable retort stand trying not to create any additional torsion or adjustment to the position of the stopcock or servo.
+If you are sure that everything is ready, open the container and press the GO button.  The green light will turn on to indicate that the titration is in progress.  Close the container to protect the Arduino.
+If there are any problems, press the STOP button.  This will stop the titration and you will need to press the GO button to restart the titration.
+When the Auto Titrator makes three beeps, the green light turns off, and the red light turns on, the endpoint has been reached.  If you disagree and wish for the titration to continue, press the GO button.  If you agree and wish to stop the titration, press the STOP button.
+At the end, the LEDs will turn off, the servo will move back to 0°, and a celebration tune will play.  Rinse the pH meter and store appropriately.   Unplug the Arduino.
+Unclamp the servo.  Remove the solution and rotate the stopcock to empty the titrant into an appropriate container.  Remove the nut and o-ring so that the stopcock can be carefully removed from the buret and cleaned.
+
+## Auto Titrator States:
+No lights - before the titration, push the GO button to start
+Green light - during titration, push the STOP button to stop and begin again
+Red light - endpoint reached, push the GO button to continue, push the STOP button to end the titration
