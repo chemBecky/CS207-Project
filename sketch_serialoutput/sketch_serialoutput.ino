@@ -166,7 +166,7 @@ void loop() {
 
 //function for getting a stable, average reading from the pH meter
 float getpH(){
-  delay(200);
+  delay(5000);
   int total = 0;
   for (int i = 0; i < 20; i++){
     total += analogRead(pHpin); //total of 20 pH readings over 2 sec
@@ -179,38 +179,38 @@ float getpH(){
 
 //function for adding largest amount of titrant
 void addLargeVolume() {
-  for ( ; servoPos <= 85; servoPos ++){ 
+  for ( ; servoPos <= 80; servoPos ++){ 
     servo.write(servoPos);  // move servo with long delay
-    delay(15);
+    delay(25);
   }
   delay(250);
-  for ( ; servoPos >= 45; servoPos --){ 
+  for ( ; servoPos >= 30; servoPos --){ 
     servo.write(servoPos);  // reverse servo
-    delay(15);
+    delay(25);
   }
 }
 
 //function for adding small amount of titrant
 void addSmallVolume() {
-  for ( ; servoPos <= 85; servoPos ++){ 
+  for ( ; servoPos <= 80; servoPos ++){ 
     servo.write(servoPos);  // move servo with small delay
-    delay(15);
+    delay(25);
   }
   delay(50);
-  for ( ; servoPos >= 45; servoPos --){ 
+  for ( ; servoPos >= 30; servoPos --){ 
     servo.write(servoPos);  // reverse servo
-    delay(15);
+    delay(25);
   }
 }
 
 //function for adding titrant drop by drop
 void addDropVolume() {
-  for ( ; servoPos <= 85; servoPos ++){ 
+  for ( ; servoPos <= 80; servoPos ++){ 
     servo.write(servoPos);  // move servo with small delay
-    delay(15);
+    delay(25);
   }
   delay(5);
-  for ( ; servoPos >= 45; servoPos --){ 
+  for ( ; servoPos >= 30; servoPos --){ 
     servo.write(servoPos);  // reverse servo
     delay(15);
   }
