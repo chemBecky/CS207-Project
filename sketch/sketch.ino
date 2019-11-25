@@ -33,8 +33,7 @@ int servoPos;   // positon of servo where 0 is a closed buret and 90 is fully op
 int openDelay;   // time that the servo waits in the 'open' position
 float pHold;   // stores previous pH reading
 float pHnew;  
-float derivativeOld = 0.01;  // stores previous derivative
-float derivativeNew;
+float derivative;
 int goButtonState = LOW;  // pull down button, HIGH when pushed
 int stopButtonState = LOW;  // pull down button
 
@@ -93,37 +92,36 @@ void loop() {
     openDelay = 4500;
     addTitrant(openDelay);  // rotate servo to add titrant
     pHnew = getpH();  // read pH after titrant added
-    derivativeNew = abs(pHnew - pHold) / 1.0;  // find the rate of change 
+    derivative = abs(pHnew - pHold) / 1.0;  // find the rate of change 
     
-      if (derivativeNew - derivativeOld > 50) {
+      if (derivative > 10) {
         stage = smallVolumeStage;  // if large change in pH, move to next stage
       }
 
     pHold = pHnew;  // store the new pH
-    derivativeOld = derivativeNew;  // store the derivative
   }
 
   else if (stage == smallVolumeStage) {
     openDelay = 1000;
     addTitrant(openDelay);  // rotate servo to add titrant
     pHnew = getpH();  // read pH after titrant added
-    derivativeNew = abs(pHnew - pHold) / 0.3;  // find the rate of change 
+    derivative = abs(pHnew - pHold) / 0.3;  // find the rate of change 
     
-      if (derivativeNew - derivativeOld > 100) {
+      if (derivative > 100) {
         stage = dropVolumeStage;  // if large change in pH, move to next stage
       }
       
     pHold = pHnew;  // store the new pH
-    derivativeOld = derivativeNew;  // store the derivative
   }
 
   else if (stage == dropVolumeStage) {
     openDelay = 1;
     addTitrant(openDelay);  // rotate servo to add titrant
+    delay(5000);  // pH is unstable at this stage
     pHnew = getpH();  // read pH after titrant added
-    derivativeNew = abs(pHnew - pHold) / 0.1;  // find the rate of change 
+    derivative = abs(pHnew - pHold) / 0.1;  // find the rate of change 
     
-      if (derivativeNew - derivativeOld > 200) {
+      if (derivative > 1000) {
         stage = endStage;  // if large change in pH, the endpoint is reached
         for(int i = 0; i < 3; i++) {
           analogWrite(piezoPin, 200);  // make three beeps on piezo speaker
@@ -134,7 +132,6 @@ void loop() {
       }
       
     pHold = pHnew;  // store the new pH
-    derivativeOld = derivativeNew;  // store the derivative
   }
 
   else if (stage == endStage) {
@@ -175,11 +172,11 @@ void loop() {
 
 //function for getting a stable, average reading from the pH meter
 float getpH() {
-  delay(1000);
+  delay(5000);
   int total = 0;
   
   for (int i = 0; i < 20; i ++) {
-    total += analogRead(pHpin); //total of 20 pH readings over 2 sec
+    total += analogRead(pHpin); // total of 20 pH readings over 2 sec
     delay(100); 
   }
 
