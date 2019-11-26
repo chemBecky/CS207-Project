@@ -86,17 +86,18 @@ void loop() {
   }
 
   else if (stage == stabilizeStage) {
+    delay(500);  // let the pH stabilize
     pHold = getpH();  // get initial pH reading
     stage = largeVolumeStage;  // move forward with titration
   }
 
   else if (stage == largeVolumeStage) {
-    openDelay = 4500;
+    openDelay = 2000;
     addTitrant(openDelay);  // rotate servo to add titrant
     pHnew = getpH();  // read pH after titrant added
     derivative = abs(pHnew - pHold) / 1.0;  // find the rate of change 
     
-      if (derivative > 10) {
+      if (derivative > 8) {
         stage = smallVolumeStage;  // if large change in pH, move to next stage
       }
 
@@ -104,12 +105,12 @@ void loop() {
   }
 
   else if (stage == smallVolumeStage) {
-    openDelay = 1000;
+    openDelay = 600;
     addTitrant(openDelay);
     pHnew = getpH();
     derivative = abs(pHnew - pHold) / 0.3;
     
-      if (derivative > 100) {
+      if (derivative > 50) {
         stage = dropVolumeStage;
       }
       
@@ -123,7 +124,7 @@ void loop() {
     pHnew = getpH();
     derivative = abs(pHnew - pHold) / 0.1;
     
-      if (derivative > 1000) {
+      if (derivative > 800) {
         stage = endStage;  // if large change in pH, the endpoint is reached
         for(int i = 0; i < 3; i++) {
           analogWrite(piezoPin, 200);  // make three beeps on piezo speaker
@@ -176,7 +177,7 @@ void loop() {
 
 //function for getting a stable, average reading from the pH meter
 float getpH() {
-  delay(1000);
+  delay(2000);
   int total = 0;
   
   for (int i = 0; i < 10; i ++) {
