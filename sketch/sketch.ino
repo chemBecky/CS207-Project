@@ -12,9 +12,10 @@
 #include <Servo.h>
 
 //declare constants for pin assignments
-const int pHpin = A4;
+const int pHpin = A0;
 const int goButtonPin = 6;  // Go button for titration start
 const int stopButtonPin = 7;  // Stop button for emergency stop
+const int servoPin = 9;
 const int redLED = 12;
 const int greenLED = 13;
 const int piezoPin = 11;
@@ -56,7 +57,6 @@ void setup() {
   pinMode(redLED, OUTPUT);
   pinMode(greenLED, OUTPUT);
   pinMode(piezoPin, OUTPUT);
-  servo.attach(9);
 }
 
 void loop() {
@@ -70,11 +70,13 @@ void loop() {
     
   else if (stage == beforeStage) {
     goButtonState = digitalRead(goButtonPin);   // check if Go button has been pressed
-    
+
+    servo.attach(servoPin);  // for stable pH readings, only initiate servo when in use
     for ( ; servoPos >= 0; servoPos --) {  // reverse servo to 0 degrees to start
       servo.write(servoPos);  
       delay(25);
     }
+    servo.detach();
     
     if (goButtonState == HIGH) {
       stage = stabilizeStage;  // if GO button has been pressed, move forward with the titration
@@ -103,23 +105,23 @@ void loop() {
 
   else if (stage == smallVolumeStage) {
     openDelay = 1000;
-    addTitrant(openDelay);  // rotate servo to add titrant
-    pHnew = getpH();  // read pH after titrant added
-    derivative = abs(pHnew - pHold) / 0.3;  // find the rate of change 
+    addTitrant(openDelay);
+    pHnew = getpH();
+    derivative = abs(pHnew - pHold) / 0.3;
     
       if (derivative > 100) {
-        stage = dropVolumeStage;  // if large change in pH, move to next stage
+        stage = dropVolumeStage;
       }
       
-    pHold = pHnew;  // store the new pH
+    pHold = pHnew;
   }
 
   else if (stage == dropVolumeStage) {
     openDelay = 1;
-    addTitrant(openDelay);  // rotate servo to add titrant
-    delay(5000);  // pH is unstable at this stage
-    pHnew = getpH();  // read pH after titrant added
-    derivative = abs(pHnew - pHold) / 0.1;  // find the rate of change 
+    addTitrant(openDelay);
+    delay(5000);
+    pHnew = getpH();
+    derivative = abs(pHnew - pHold) / 0.1;
     
       if (derivative > 1000) {
         stage = endStage;  // if large change in pH, the endpoint is reached
@@ -131,7 +133,7 @@ void loop() {
         }
       }
       
-    pHold = pHnew;  // store the new pH
+    pHold = pHnew;
   }
 
   else if (stage == endStage) {
@@ -148,11 +150,13 @@ void loop() {
 
     else if (stopButtonState == HIGH) {  // if the Stop button is pressed end the titration
       stage = beforeStage; 
-      
+
+      servo.attach(servoPin);
       for ( ; servoPos >= 0; servoPos --) {  // reverse servo to 0 degrees for next time
         servo.write(servoPos);  
         delay(25);
       }
+      servo.detach();
       
       for (int note = 0; note < 22; note++) {  //play the Annie theme to celebrate completion
         int actualLength = 125 * noteLength[note];  // play each 1/16th note for 125 ms
@@ -172,29 +176,31 @@ void loop() {
 
 //function for getting a stable, average reading from the pH meter
 float getpH() {
-  delay(5000);
+  delay(1000);
   int total = 0;
   
-  for (int i = 0; i < 20; i ++) {
-    total += analogRead(pHpin); // total of 20 pH readings over 2 sec
+  for (int i = 0; i < 10; i ++) {
+    total += analogRead(pHpin); // total of 10 pH readings over one second
     delay(100); 
   }
 
-  pHnew = total / 20;  //find the average pH value
+  pHnew = total / 10;  //find the average pH value
   return pHnew;
 }
 
 //function for adding titrant
 void addTitrant(int openDelay) {
+  servo.attach(servoPin);
   for ( ; servoPos <= 80; servoPos ++) { 
     servo.write(servoPos);  // move servo to open
-    delay(25);
+    delay(22);
   }
   
   delay(openDelay); //delay while titrant is added
   
   for ( ; servoPos >= 30; servoPos --) { 
     servo.write(servoPos);  // move servo to closed
-    delay(25);
+    delay(22);
   }
+  servo.detach();
 }
