@@ -72,9 +72,10 @@ void loop() {
     goButtonState = digitalRead(goButtonPin);   // check if Go button has been pressed
 
     servo.attach(servoPin);  // for stable pH readings, only initiate servo when in use
+    servoPos = servo.read();  //read current servo position
     for ( ; servoPos >= 0; servoPos --) {  // reverse servo to 0 degrees to start
       servo.write(servoPos);  
-      delay(25);
+      delay(30);
     }
     servo.detach();
     
@@ -83,16 +84,17 @@ void loop() {
       digitalWrite(redLED, LOW);  // turn off the red LED
       digitalWrite(greenLED, HIGH);  // turn on the green LED to indicate titration start
     }
+    delay(500);
   }
 
   else if (stage == stabilizeStage) {
-    delay(500);  // let the pH stabilize
+    delay(2000);  // let the pH stabilize
     pHold = getpH();  // get initial pH reading
     stage = largeVolumeStage;  // move forward with titration
   }
 
   else if (stage == largeVolumeStage) {
-    openDelay = 2000;
+    openDelay = 2500;
     addTitrant(openDelay);  // rotate servo to add titrant
     pHnew = getpH();  // read pH after titrant added
     derivative = abs(pHnew - pHold) / 1.0;  // find the rate of change 
@@ -110,7 +112,7 @@ void loop() {
     pHnew = getpH();
     derivative = abs(pHnew - pHold) / 0.3;
     
-      if (derivative > 50) {
+      if (derivative > 30) {
         stage = dropVolumeStage;
       }
       
@@ -192,7 +194,7 @@ float getpH() {
 //function for adding titrant
 void addTitrant(int openDelay) {
   servo.attach(servoPin);
-  for ( ; servoPos <= 80; servoPos ++) { 
+  for ( ; servoPos <= 75; servoPos ++) { 
     servo.write(servoPos);  // move servo to open
     delay(22);
   }
@@ -201,7 +203,7 @@ void addTitrant(int openDelay) {
   
   for ( ; servoPos >= 30; servoPos --) { 
     servo.write(servoPos);  // move servo to closed
-    delay(22);
+    delay(30);
   }
   servo.detach();
 }
