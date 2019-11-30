@@ -64,6 +64,10 @@ void loop() {
   stopButtonState = digitalRead(stopButtonPin);  // Use stopButton as an emergency stop
 
   if (stopButtonState == HIGH && stage != endStage) {   // if the emergency stop is pressed, abort titration
+    analogWrite(piezoPin, 200);  // beep the piezo speaker
+    delay(500);
+    digitalWrite(piezoPin, 0);
+
     digitalWrite(greenLED, LOW); //turn off green LED
     stage = beforeStage;  
   }
@@ -84,7 +88,11 @@ void loop() {
       digitalWrite(redLED, LOW);  // turn off the red LED
       digitalWrite(greenLED, HIGH);  // turn on the green LED to indicate titration start
     }
-    delay(500);
+
+    digitalWrite(greenLED, HIGH); //blink the LED to indicate that the Auto Titrator is standing by
+    delay(250);
+    digitalWrite(greenLED, LOW);
+    delay(250);
   }
 
   else if (stage == stabilizeStage) {
@@ -129,7 +137,7 @@ void loop() {
       if (derivative > 800) {
         stage = endStage;  // if large change in pH, the endpoint is reached
         for(int i = 0; i < 3; i++) {
-          analogWrite(piezoPin, 200);  // make three beeps on piezo speaker
+          analogWrite(piezoPin, 400);  // make three beeps on piezo speaker
           delay(500);
           digitalWrite(piezoPin, 0);
           delay(200);
@@ -161,7 +169,7 @@ void loop() {
       }
       servo.detach();
       
-      for (int note = 0; note < 22; note++) {  //play the Annie theme to celebrate completion
+      for (int note = 0; note < 22; note++) {  // play the Annie theme to celebrate completion
         int actualLength = 125 * noteLength[note];  // play each 1/16th note for 125 ms
         tone(piezoPin, melody[note], actualLength);
         
