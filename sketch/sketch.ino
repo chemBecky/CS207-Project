@@ -187,7 +187,7 @@ void loop() {
 
 //function for getting a stable, average reading from the pH meter
 float getpH() {
-  delay(2000);
+  delay(4000);
   int total = 0;
   
   for (int i = 0; i < 10; i ++) {
