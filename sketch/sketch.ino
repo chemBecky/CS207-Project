@@ -89,9 +89,9 @@ void loop() {
       digitalWrite(greenLED, HIGH);  // turn on the green LED to indicate titration start
     }
 
-    digitalWrite(greenLED, HIGH); //blink the LED to indicate that the Auto Titrator is standing by
-    delay(250);
     digitalWrite(greenLED, LOW);
+    delay(250);
+    digitalWrite(greenLED, HIGH); //blink the LED to indicate that the Auto Titrator is standing by
     delay(250);
   }
 
@@ -102,7 +102,7 @@ void loop() {
   }
 
   else if (stage == largeVolumeStage) {
-    openDelay = 2500;
+    openDelay = 3500;
     addTitrant(openDelay);  // rotate servo to add titrant
     pHnew = getpH();  // read pH after titrant added
     derivative = abs(pHnew - pHold) / 1.0;  // find the rate of change 
@@ -134,7 +134,7 @@ void loop() {
     pHnew = getpH();
     derivative = abs(pHnew - pHold) / 0.1;
     
-      if (derivative > 800) {
+      if (derivative > 500) {
         stage = endStage;  // if large change in pH, the endpoint is reached
         for(int i = 0; i < 3; i++) {
           analogWrite(piezoPin, 400);  // make three beeps on piezo speaker
@@ -202,7 +202,7 @@ float getpH() {
 //function for adding titrant
 void addTitrant(int openDelay) {
   servo.attach(servoPin);
-  for ( ; servoPos <= 75; servoPos ++) { 
+  for ( ; servoPos <= 80; servoPos ++) { 
     servo.write(servoPos);  // move servo to open
     delay(22);
   }
