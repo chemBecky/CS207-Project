@@ -1,8 +1,17 @@
 /* CS 207 Final Project
-  Automated Titrator
+  The Auto Titrator
   by Becky Jamieson
+  December 2019
   
-  Description
+  This project automates titrations that can be monitored by pH.  A servo motor that is attached to the stopcock of
+  a buret will rotate to add decreasing volumes of titrant depending on the change in pH measured with an electrode.
+  It is intended to be used independently of a computer at the push of the "Go" button.  An emergency "Stop" button,
+  a red LED, a green LED, and a piezo speaker are also used to communicate information.  When the endpoint has been 
+  reached, the red LED turns on and the unit beeps three times. If the user agrees that the titration is complete, 
+  they press the Stop button.  If not, they can press the Go button to add another drop of titrant.
+
+  For more instructions and circuit diagrams, please see https://github.com/chemBecky/CS207-Project
+  
   
   Based on The Titration Machine by Enginerds2015
   https://www.instructables.com/id/Arduino-Based-Chemical-Titration-aka-The-Titration/
