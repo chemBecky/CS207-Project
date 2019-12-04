@@ -10,7 +10,7 @@ This project uses an Arduino to automate titrations that can be monitored by pH.
 - [/circuit and breadboard](circuit%20and%20breadboard): Circuit diagrams
 - [/instructions.md](Instructions.md): Instructions for use of Auto Titrator
 - [/video and pictures](video%20and%20pictures): pictures of project in action
-- other sketch files: [testing servo movements to calibrate volume](/sketch_servotest/sketch_servotest.ino) and [creating a tune to play after a successful titration](/sketch_toneMelodytest)
+- other sketch files: [testing servo movements to calibrate volume](/sketch_servotest/sketch_servotest.ino) and [creating a tune to play after a successful titration](/sketch_toneMelodytest/sketch_toneMelodytest.ino)
 
 ## Materials
 
