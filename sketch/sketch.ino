@@ -15,7 +15,6 @@
   
   Based on The Titration Machine by Enginerds2015
   https://www.instructables.com/id/Arduino-Based-Chemical-Titration-aka-The-Titration/
-
 */
 
 #include <Servo.h>
