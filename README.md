@@ -28,3 +28,7 @@ This project uses an Arduino to automate titrations that can be monitored by pH.
 - [ ]	plastic container to protect Arduino electronics (cut holes for access to buttons and servo cable)
 - [ ]	potentiometer (for testing if desired)
 - [ ] for the titration: buret, stir bar, stir plate, acidic/basic solutions, pH indicator
+
+## Usage
+<img src="circuit and breadboard/final project circuit.png" height="500">
+<img src="circuit and breadboard/final project breadboard.png" height="450">
