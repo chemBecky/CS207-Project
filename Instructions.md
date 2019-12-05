@@ -1,6 +1,6 @@
 #  Instructions for use of Auto Titrator
 
-1.  Only needs to be done once: Upload sketch.ino code onto Arduino board.
+1.  Only needs to be done before the first use: Attach the servo to a stopcock.  Use the [sketch_servotest](sketch_servotest/sketch_servotest.ino) to calibrate the movements and add 1.0 mL, 0.3 mL, and a drop from the buret.  If desired, use the [sketch_toneMelodytest](sketch_toneMelodytest/sketch_toneMelodytest.ino) to create a song to play after a successful titration.  Upload [sketch.ino](/sketch/sketch.ino) code onto Arduino board with the values from the servo and tone test sketches.
 2.  Attach a clean buret to a retort stand.  Insert the stopcock attached to the servo into buret and secure with o-ring and nut.  Rotate the stopcock to open and rinse buret with titrant.  Check for and remove bubbles that form.  Rotate the stopcock to the closed position.  Fill the buret with at least 20 mL of titrant.
 3.  Set up the stir plate, buret height, and solution to be analyzed.  Insert the pH meter into the solution.  Start stirring the solution.
 4.  Plug in the 5V adapter to power up the Arduino.  Record the initial buret reading.  The servo should move back to the starting position.
