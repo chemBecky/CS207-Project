@@ -31,7 +31,7 @@ void setup() {
 }
 
 void loop() {
-  servoPos = analogRead(servoPin);
+  servoPos = servo.read();  // get the current servo position
   
   for (; servoPos <= 80; servoPos ++) { 
     servo.write(servoPos);              // tell servo to go to position in variable 'servoPos' in steps of 1 degree
