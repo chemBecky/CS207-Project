@@ -3,12 +3,20 @@
   by Becky Jamieson
   December 2019
   
-  This project automates titrations that can be monitored by pH.  A servo motor that is attached to the stopcock of
-  a buret will rotate to add decreasing volumes of titrant depending on the change in pH measured with an electrode.
-  It is intended to be used independently of a computer at the push of the "Go" button.  An emergency "Stop" button,
-  a red LED, a green LED, and a piezo speaker are also used to communicate information.  When the endpoint has been 
-  reached, the red LED turns on and the unit beeps three times. If the user agrees that the titration is complete, 
-  they press the Stop button.  If not, they can press the Go button to add another drop of titrant.
+  This project uses an Arduino to automate titrations that can be monitored by pH.  A servo motor that 
+  is attached to the stopcock of a buret will rotate to add decreasing volumes of titrant depending on
+  the derivative (change in pH over change in volume).  The pH is measured with an electrode attached 
+  to a pH-4502c.  It is intended to be used independently of a computer at the push of the "Go" button.
+  An emergency "Stop" button, a red LED, a green LED, and a piezo speaker are also used to communicate
+  information. There are six stages in the sketch: before, stabilization, large volume, small volume, 
+  drop volume, and end.  The before stage moves the servo to 0 degrees and prevents the titration from 
+  starting until the Go button is pressed.  The stabilization stage gets the initial pH reading.  The 
+  volume adding stages send different delay times for the buret to be in the Open position.  The derivative 
+  is calculated after each volume addition and compared to a threshold value to move to the next stage.
+  When the threshold for the drop volume stage has been exceeded, the end stage is reached. The red LED 
+  turns on and the unit beeps three times. If the user agrees that the titration is complete, they press 
+  the Stop button.  If not, they can press the Go button to go back to the drop volume stage.  If a 
+  successful titration has been achieved, a tune is played on the piezo speaker.
 
   For more instructions and circuit diagrams, please see https://github.com/chemBecky/CS207-Project
   
